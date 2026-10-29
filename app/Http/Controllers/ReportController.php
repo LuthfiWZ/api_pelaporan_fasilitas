@@ -64,9 +64,11 @@ class ReportController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
+        $report->load(['user', 'category', 'statusLogs.user']);
+
         return response()->json([
             'message' => 'Laporan berhasil dikirim',
-            'data' => new ReportResource($report->load(['user', 'category'])),
+            'data' => new ReportResource($report),
         ], 201);
     }
 
