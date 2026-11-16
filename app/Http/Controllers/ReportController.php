@@ -54,7 +54,7 @@ class ReportController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')->store('reports', 'public');
+            $validated['photo'] = $request->file('photo')->store('reports', 's3');
         }
 
         $report = $request->user()->reports()->create($validated);
@@ -97,7 +97,7 @@ class ReportController extends Controller
         $photoPath = null;
 
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('reports/progress', 'public');
+            $photoPath = $request->file('photo')->store('reports/progress', 's3');
         }
 
         $report->update([
@@ -125,12 +125,12 @@ class ReportController extends Controller
         $this->authorize('delete', $report);
 
         if ($report->photo) {
-            Storage::disk('public')->delete($report->photo);
+            Storage::disk('s3')->delete($report->photo);
         }
 
         foreach ($report->statusLogs as $log) {
             if ($log->photo) {
-                Storage::disk('public')->delete($log->photo);
+                Storage::disk('s3')->delete($log->photo);
             }
         }
 

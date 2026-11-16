@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class ReportResource extends JsonResource
 {
@@ -27,7 +28,7 @@ class ReportResource extends JsonResource
             'room' => $this->room,
             'photo' => $this->photo,
             'photo_url' => $this->photo
-                ? $request->getSchemeAndHttpHost().'/storage/'.ltrim((string) $this->photo, '/')
+                ? Storage::disk('s3')->url($this->photo)
                 : null,
             'status' => $this->status,
             'status_label' => $this->statusLabel(),
